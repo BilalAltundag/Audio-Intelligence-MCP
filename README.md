@@ -147,5 +147,14 @@ The following examples represent pseudo inputs that an MCP client would translat
 - If a `config.json` file exists, it updates defaults like `output_dir`, `sample_rate`, and `overwrite_files`.
 - Tools return error messages for unsupported formats or non-existent paths.
 
-
+## Upcoming Features
+| 🧩 **Tool Adı** | 🎯 **Amaç** | 🧾 **Açıklama** |
+|------------------|-------------|------------------|
+| **noise_reduction** | Gürültü azaltma | `noisereduce` veya `torchaudio` ile arka plan seslerini filtreler. |
+| **silence_detection** | Sessizlikleri tespit etme | Audio içinde sessizlik bölümlerini bularak otomatik kesim veya bölme işlemi yapar. |
+| **speaker_diarization** | Konuşmacı ayrımı | `pyannote.audio` veya `resemblyzer` ile kim konuşuyor ayrımı yapılır. |
+| **emotion_recognition** | Duygu analizi | MelSpectrogram + küçük bir CNN/Transformer modeliyle “mutlu”, “üzgün” gibi duygu tahmini. |
+| **auto_editing** | Akıllı ses montajı | Sessizlikleri kaldırır, gürültüyü azaltır, ses seviyelerini dengeler (pipeline gibi çalışır). |
+| **voice_similarity** | Ses benzerliği ölçer | İki sesin aynı kişiye ait olup olmadığını belirler. |
+| **keyword_spotting** | Anahtar kelime tespiti | Ses içinde belirli kelimeleri tespit eder (örnek: “hey assistant”). |
 
