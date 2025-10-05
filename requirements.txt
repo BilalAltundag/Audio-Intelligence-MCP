@@ -1,0 +1,10 @@
+mcp==1.16.0  # FastMCP için
+fastapi==0.118.0  # FastMCP http için kullanabilir, ama zorunlu değil
+uvicorn==0.35.0
+transformers==4.57.0
+torch==2.8.0
+librosa==0.10.2
+pydub==0.25.1
+mutagen==1.47.0
+matplotlib==3.9.2
+numpy==2.1.1
