@@ -148,13 +148,13 @@ The following examples represent pseudo inputs that an MCP client would translat
 - Tools return error messages for unsupported formats or non-existent paths.
 
 ## Upcoming Features
-| 🧩 **Tool Adı** | 🎯 **Amaç** | 🧾 **Açıklama** |
-|------------------|-------------|------------------|
-| **noise_reduction** | Gürültü azaltma | `noisereduce` veya `torchaudio` ile arka plan seslerini filtreler. |
-| **silence_detection** | Sessizlikleri tespit etme | Audio içinde sessizlik bölümlerini bularak otomatik kesim veya bölme işlemi yapar. |
-| **speaker_diarization** | Konuşmacı ayrımı | `pyannote.audio` veya `resemblyzer` ile kim konuşuyor ayrımı yapılır. |
-| **emotion_recognition** | Duygu analizi | MelSpectrogram + küçük bir CNN/Transformer modeliyle “mutlu”, “üzgün” gibi duygu tahmini. |
-| **auto_editing** | Akıllı ses montajı | Sessizlikleri kaldırır, gürültüyü azaltır, ses seviyelerini dengeler (pipeline gibi çalışır). |
-| **voice_similarity** | Ses benzerliği ölçer | İki sesin aynı kişiye ait olup olmadığını belirler. |
-| **keyword_spotting** | Anahtar kelime tespiti | Ses içinde belirli kelimeleri tespit eder (örnek: “hey assistant”). |
+| 🧩 **Tool Name** | 🎯 **Purpose** | 🧾 **Description** |
+|------------------|----------------|--------------------|
+| **noise_reduction** | Noise reduction | Filters background noise using `noisereduce` or `torchaudio`. |
+| **silence_detection** | Silence detection | Detects silent segments in audio for automatic trimming or splitting. |
+| **speaker_diarization** | Speaker diarization | Distinguishes who is speaking using `pyannote.audio` or `resemblyzer`. |
+| **emotion_recognition** | Emotion recognition | Predicts emotions such as “happy” or “sad” using MelSpectrogram + CNN/Transformer. |
+| **auto_editing** | Smart audio editing | Removes silence, reduces noise, and balances volume automatically (pipeline-style). |
+| **voice_similarity** | Voice similarity | Determines whether two voice samples belong to the same speaker. |
+| **keyword_spotting** | Keyword spotting | Detects specific keywords within audio (e.g., “hey assistant”). |
 
