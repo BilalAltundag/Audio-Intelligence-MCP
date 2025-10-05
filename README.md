@@ -1,102 +1,102 @@
 # Audio-Intelligence-MCP
 🎧 A modular FastMCP server for audio processing, transcription, classification, and analysis. Includes automatic feature extraction, noise reduction, speaker diarization, and more.
 
-Ses işleme için MCP (Model Context Protocol) tabanlı bir sunucu. Transkripsiyon, özellik analizi, sınıflandırma, metadata çıkarımı ve format dönüştürme araçları sağlar.
+An MCP (Model Context Protocol) based server for audio processing. It provides tools for transcription, feature analysis, classification, metadata extraction, and format conversion.
 
-## İçerik
-- Kurulum
-- Çalıştırma
-- Araçlar (Tools)
-- Örnek Kullanımlar
-- Çıktılar ve Klasör Yapısı
-- Notlar ve İpuçları
+## Table of Contents
+- Installation
+- Running
+- Tools
+- Example Usage
+- Outputs and Directory Structure
+- Notes and Tips
 
-## Kurulum
-1) Python 3.10+ ve (opsiyonel) CUDA destekli PyTorch kurulu olmalı.
-2) Bağımlılıkları yükleyin:
+## Installation
+1) Python 3.10+ and (optional) CUDA-enabled PyTorch should be installed.
+2) Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
-3) pydub için FFmpeg gerekli. Sisteminizde FFmpeg kurulu olduğundan emin olun ve PATH'e ekleyin.
-   - Windows: `choco install ffmpeg` veya `winget install Gyan.FFmpeg`
+3) FFmpeg is required for pydub. Ensure FFmpeg is installed on your system and added to PATH.
+   - Windows: `choco install ffmpeg` or `winget install Gyan.FFmpeg`
    - macOS: `brew install ffmpeg`
    - Linux: `sudo apt-get install ffmpeg`
 
-## Çalıştırma
-### MCP Sunucusunu Stdio ile Başlatma
-Sunucu, `stdio` transport ile çalışır ve bir MCP istemcisi tarafından başlatılır. Doğrudan test etmek için:
+## Running
+### Start MCP Server via Stdio
+The server runs with `stdio` transport and is launched by an MCP client. For a direct test:
 ```bash
 python main.py
 ```
-Bu modda bir MCP istemcisi olmadan anlamlı bir çıktı vermez; tipik kullanım bir istemci aracılığıyladır.
+In this mode, without an MCP client, it won’t produce meaningful output; typical usage is via a client.
 
-### Örnek İstemci (LangGraph + Gemini)
-`try.py`, `main.py` MCP sunucusunu `stdio` ile başlatır, araçları keşfeder ve ReAct ajanına tanımlar:
+### Example Client (LangGraph + Gemini)
+`try.py` launches the `main.py` MCP server over `stdio`, discovers tools, and wires them to a ReAct agent:
 ```bash
 python try.py
 ```
-Varsayılan örnek, `audio/` altındaki dosyalarla bir transkripsiyon isteği yapar.
+The default sample sends a transcription request using files under `audio/`.
 
-## Araçlar (Tools)
-Sunucu adı: `Audio-Intelligence-MCP`
+## Tools
+Server name: `CustomAudioMCP`
 
-Tüm araçlar dosya yolu listesi alır. Geçersiz yol veya desteklenmeyen formatta hata döner. Desteklenen formatlar: `.wav`, `.mp3`, `.ogg`, `.flac`.
+All tools accept a list of file paths. Invalid paths or unsupported formats return an error. Supported formats: `.wav`, `.mp3`, `.ogg`, `.flac`.
 
 ### transcript
-- Amaç: Ses dosyalarını metne çevirir (Whisper base).
-- Girdi:
+- Purpose: Converts audio files to text (Whisper base).
+- Input:
   - `file_paths: List[str]`
   - `language: str = "en"`
   - `output_dir: str = "output"`
   - `overwrite: bool = False`
-- Çıktı:
+- Output:
   - `{ "transcripts": { "<path>": { "transcription": str, "transcript_file": str } | { "error": str } } }`
-- Not: 16kHz örnekleme ile işler ve çıktıyı `output/transcripts/` altına yazar.
+- Note: Processes at 16kHz and writes output under `output/transcripts/`.
 
 ### feature_analysis
-- Amaç: Pitch, tempo, süre gibi temel özellikleri çıkarır; dalga formu PNG üretir.
-- Girdi:
+- Purpose: Extracts basic features like pitch, tempo, duration; generates a waveform PNG.
+- Input:
   - `file_paths: List[str]`
   - `output_dir: str = "output"`
   - `overwrite: bool = False`
-- Çıktı:
+- Output:
   - `{ "analyses": { "<path>": { "features": { "mean_pitch": float, "tempo": float, "duration_s": float }, "waveform_plot": str } | { "error": str } } }`
-- Not: Dalga formu görselleri `output/waveforms/` altına kaydedilir.
+- Note: Waveform images are saved under `output/waveforms/`.
 
 ### audio_classification
-- Amaç: Ses içeriğini sınıflandırır (AST, AudioSet üstünde eğitilmiş model).
-- Girdi:
+- Purpose: Classifies audio content (AST model fine-tuned on AudioSet).
+- Input:
   - `file_paths: List[str]`
   - `output_dir: str = "output"`
   - `output_csv: Optional[str] = None`
   - `overwrite: bool = False`
-- Çıktı:
+- Output:
   - `{ "classifications": { "<path>": { "label": str, "confidence": float } | { "error": str }, "csv_path"?: str, "csv_error"?: str } }`
-- Not: `output/classifications/` içine opsiyonel CSV yazar.
+- Note: Optionally writes a CSV into `output/classifications/`.
 
 ### metadata_extraction
-- Amaç: Süre, örnek hızı, kanal sayısı, etiketler (tags) gibi metadata çıkarır ve JSON kaydeder.
-- Girdi:
+- Purpose: Extracts metadata like duration, sample rate, channels, and tags; saves as JSON.
+- Input:
   - `file_paths: List[str]`
   - `output_dir: str = "output"`
   - `overwrite: bool = False`
-- Çıktı:
+- Output:
   - `{ "metadata": { "<path>": { "metadata": { "duration_ms": int, "bitrate": int, "channels": int, "tags": object }, "metadata_file": str } | { "error": str } } }`
-- Not: JSON dosyaları `output/metadata/` altına yazılır.
+- Note: JSON files are saved under `output/metadata/`.
 
 ### audio_conversion
-- Amaç: Dosyaları hedef ses formatına dönüştürür.
-- Girdi:
+- Purpose: Converts files to the target audio format.
+- Input:
   - `file_paths: List[str]`
   - `target_format: str = "wav"`
   - `output_dir: str = "output"`
   - `overwrite: bool = False`
-- Çıktı:
+- Output:
   - `{ "converted_files": { "<path>": { "converted_file": str } | { "error": str } } }`
-- Not: Çıktılar `output/converted/` altına yazılır.
+- Note: Outputs are written under `output/converted/`.
 
-## Örnek Kullanımlar
-Aşağıdaki örnekler MCP istemcisi tarafından tool çağrısına dönüştürülür. Pseudo girdi örnekleri:
+## Example Usage
+The following examples represent pseudo inputs that an MCP client would translate into tool calls:
 
 ```json
 {
@@ -133,17 +133,19 @@ Aşağıdaki örnekler MCP istemcisi tarafından tool çağrısına dönüştür
 }
 ```
 
-## Çıktılar ve Klasör Yapısı
+## Outputs and Directory Structure
 - `output/`
   - `transcripts/`: `*_transcript_<timestamp>.txt`
   - `waveforms/`: `*_waveform_<timestamp>.png`
-  - `classifications/`: `labels.csv` (opsiyonel)
+  - `classifications/`: `labels.csv` (optional)
   - `metadata/`: `*_metadata_<timestamp>.json`
   - `converted/`: `*_converted_<timestamp>.<ext>`
 
-## Notlar ve İpuçları
-- GPU varsa otomatik `cuda` kullanılacaktır; aksi halde `cpu`.
-- Büyük modeller ilk çağrıda indirileceğinden ilk çalışma süresi uzun olabilir.
-- `config.json` dosyası mevcutsa `output_dir`, `sample_rate`, `overwrite_files` gibi varsayılanları günceller.
-- Desteklenmeyen formatlar veya mevcut olmayan yollar için araçlar hata mesajı döndürür.
+## Notes and Tips
+- If a GPU is available, `cuda` will be used automatically; otherwise `cpu`.
+- First run may take longer due to model downloads.
+- If a `config.json` file exists, it updates defaults like `output_dir`, `sample_rate`, and `overwrite_files`.
+- Tools return error messages for unsupported formats or non-existent paths.
+
+
 
