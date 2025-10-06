@@ -1,7 +1,5 @@
 # Audio-Intelligence-MCP
-🎧 A modular FastMCP server for audio processing, transcription, classification, and analysis. Includes automatic feature extraction, noise reduction, speaker diarization, and more.
-
-An MCP (Model Context Protocol) based server for audio processing. It provides tools for transcription, feature analysis, classification, metadata extraction, and format conversion.
+🎧 An MCP (Model Context Protocol) based server for audio processing. It provides tools for transcription, feature analysis, classification, metadata extraction, and format conversion.
 
 ## Table of Contents
 - Installation
